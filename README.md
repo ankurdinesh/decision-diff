@@ -2,6 +2,35 @@
 
 Decision Diff is a polished Next.js application for comparing two decision documents at the reasoning level. It uses an LLM to identify changed assumptions, new and removed risks, tradeoffs, reversed decisions, new opportunities, and unanswered questions, then presents the result as an executive summary with Markdown export.
 
+## Problem
+
+Decision documents change for reasons that are easy to miss in a line-by-line diff.
+A standard text diff can show that wording changed, but it does not explain whether the
+underlying decision logic shifted.
+
+Decision Diff focuses on the reasoning layer:
+
+- Which assumptions changed?
+- Which risks appeared or disappeared?
+- Which tradeoffs became more important?
+- Which decisions were reversed?
+- Which opportunities and open questions are now visible?
+
+The goal is to produce a board-ready summary that helps teams understand what changed
+in the thinking, not just what changed in the text.
+
+## Example Screenshots
+
+Add screenshots here after running the app locally.
+
+Suggested screenshots:
+
+- Upload screen with the original and revised document dropzones.
+- Completed executive summary.
+- Insight category cards showing changed assumptions, risks, tradeoffs, and open questions.
+
+You can use the synthetic files in `test-fixtures` to generate a repeatable demo report.
+
 ## Local Setup
 
 ```bash
@@ -49,6 +78,51 @@ than the model-backed analysis.
 
 The upload flow supports PDF, DOCX, TXT, and Markdown files up to 25 MB each.
 
+## Architecture
+
+Decision Diff is a small Next.js app with a server-side analysis route.
+
+- `app/page.tsx`: client UI for uploading the original and revised documents, submitting analysis, rendering the report, and exporting Markdown.
+- `app/api/analyze/route.ts`: server route that receives uploaded files, extracts text, calls the analyzer, and returns structured JSON.
+- `lib/document-extraction.ts`: extracts readable text from PDF, DOCX, Markdown, and plain text files.
+- `lib/decision-diff.ts`: provider-backed analysis path using the OpenAI SDK. It supports OpenAI and OpenAI-compatible providers.
+- `lib/local-decision-diff.ts`: deterministic local fallback for demos, smoke tests, and provider quota failures.
+- `lib/prompts.ts`: prompt template for the model-backed reasoning comparison.
+- `lib/report-schema.ts`: Zod schema that validates the model response before it reaches the UI.
+- `lib/markdown.ts`: converts a structured report into an exportable Markdown summary.
+
+The app keeps LLM credentials server-side only. Browser code uploads documents to
+`/api/analyze`; the API route reads environment variables and calls the configured
+provider.
+
+## Prompt Engineering
+
+The model prompt asks for a reasoning-level comparison rather than a textual diff.
+It explicitly instructs the model to focus on:
+
+- changed assumptions
+- new risks
+- removed risks
+- product tradeoffs
+- reversed decisions
+- new opportunities
+- unanswered questions
+
+The prompt requires strict JSON with a fixed shape. The server then validates the response
+with Zod before sending it to the frontend. This keeps the UI predictable and avoids
+rendering malformed model output.
+
+The prompt also pushes for concise executive language:
+
+- specific and evidence-based
+- fewer, sharper bullets
+- empty arrays when a category has no material change
+- short details suitable for a summary card
+
+For local or quota-constrained testing, `ANALYSIS_MODE=local` bypasses the LLM and uses
+a deterministic section-and-bullet comparison. That path is less nuanced but useful for
+testing the product flow without provider spend.
+
 ## Test Fixtures
 
 The `test-fixtures` folder contains two synthetic Markdown files you can upload to test
@@ -56,3 +130,14 @@ the comparison flow without preparing documents:
 
 - `original-decision-memo.md`
 - `revised-decision-memo.md`
+
+## Future Ideas
+
+- Add user-owned provider keys through a settings screen or encrypted server-side storage.
+- Support more providers with first-class configuration presets.
+- Add streaming progress states for extraction, analysis, validation, and report rendering.
+- Add screenshot assets and a hosted demo.
+- Add side-by-side evidence snippets for each generated insight.
+- Add organization-level usage limits and request logging.
+- Add automated tests for document extraction, provider error handling, and local fallback output.
+- Add deployment examples for Vercel, Render, and Docker.
