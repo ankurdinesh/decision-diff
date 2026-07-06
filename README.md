@@ -20,8 +20,11 @@ The goal is to produce a board-ready summary that helps teams understand what ch
 in the thinking, not just what changed in the text.
 
 ## Example Screenshots
+<img width="1492" height="815" alt="Screenshot 2026-07-06 at 23 07 45" src="https://github.com/user-attachments/assets/ed433a64-0c67-4bf0-912e-0c53f1ff2498" />
 
-Add screenshots here after running the app locally.
+<img width="1492" height="815" alt="Screenshot 2026-07-06 at 23 08 08" src="https://github.com/user-attachments/assets/ba066ce7-f97a-44d9-8f88-0f6ccb02bda9" />
+
+<img width="1492" height="815" alt="Screenshot 2026-07-06 at 23 08 24" src="https://github.com/user-attachments/assets/d8e73d76-26d5-4a4d-b243-ad28a2a8505d" />
 
 Suggested screenshots:
 
