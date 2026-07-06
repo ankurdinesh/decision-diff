@@ -144,3 +144,5 @@ the comparison flow without preparing documents:
 - Add organization-level usage limits and request logging.
 - Add automated tests for document extraction, provider error handling, and local fallback output.
 - Add deployment examples for Vercel, Render, and Docker.
+
+#ai #llm #product-management #decision-making #executive
