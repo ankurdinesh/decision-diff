@@ -26,12 +26,6 @@ in the thinking, not just what changed in the text.
 
 <img width="1492" height="815" alt="Screenshot 2026-07-06 at 23 08 24" src="https://github.com/user-attachments/assets/d8e73d76-26d5-4a4d-b243-ad28a2a8505d" />
 
-Suggested screenshots:
-
-- Upload screen with the original and revised document dropzones.
-- Completed executive summary.
-- Insight category cards showing changed assumptions, risks, tradeoffs, and open questions.
-
 You can use the synthetic files in `test-fixtures` to generate a repeatable demo report.
 
 ## Local Setup
